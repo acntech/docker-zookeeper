@@ -1,2 +1,2 @@
 # docker-zookeeper
-Docker image with ZooKeeper, based on the acntech/jre8 image
+Docker image with Apache ZooKeeper, based on the acntech/jre image

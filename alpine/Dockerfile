@@ -1,4 +1,4 @@
-FROM acntech/jre:1.8.0_101
+FROM acntech/jre:1.8.0_101-alpine
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
@@ -12,7 +12,8 @@ ENV ZOOKEEPER_DATA /var/zookeeper
 ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
 
 
-RUN apt-get update && apt-get -y upgrade
+RUN apk update && apk upgrade
+RUN apk add bash gnupg
 
 RUN wget --no-cookies --no-check-certificate "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz" -O /tmp/zookeeper.tar.gz
 RUN wget --no-cookies --no-check-certificate "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc" -O /tmp/zookeeper.tar.gz.asc

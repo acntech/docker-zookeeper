@@ -9,9 +9,10 @@ ARG ZOOKEEPER_DIR=zookeeper-${ZOOKEEPER_VERSION}
 
 ENV ZOOKEEPER_BASE /opt/zookeeper
 ENV ZOOKEEPER_HOME ${ZOOKEEPER_BASE}/default
-ENV ZOOKEEPER_DATA /var/lib/zookeeper
-ENV ZOOKEEPER_LOGS /var/log/zookeeper
+ENV ZOO_DATADIR /var/lib/zookeeper
+ENV ZOO_LOG_DIR /var/log/zookeeper
 ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
+ENV TERM xterm
 
 
 RUN apk update && \
@@ -20,8 +21,8 @@ RUN apk update && \
 
 
 RUN mkdir -p ${ZOOKEEPER_BASE} && \
-    mkdir ${ZOOKEEPER_DATA} && \
-    mkdir ${ZOOKEEPER_LOGS}
+    mkdir ${ZOO_DATADIR} && \
+    mkdir ${ZOO_LOG_DIR}
 
 
 RUN wget --no-cookies \
@@ -51,6 +52,7 @@ RUN tar -xzvf /tmp/zookeeper.tar.gz -C ${ZOOKEEPER_BASE}/ && \
 COPY resources/zoo.cfg ${ZOOKEEPER_HOME}/conf/
 COPY resources/log4j.properties ${ZOOKEEPER_HOME}/conf/
 COPY resources/zkServer.sh ${ZOOKEEPER_HOME}/bin/
+COPY resources/entrypoint.sh /entrypoint.sh
 
 
 EXPOSE 2181 2888 3888
@@ -60,7 +62,7 @@ WORKDIR ${ZOOKEEPER_HOME}
 
 
 VOLUME "${ZOOKEEPER_HOME}/conf"
-VOLUME "${ZOOKEEPER_DATA}"
+VOLUME "${ZOO_DATADIR}"
 
 
-CMD ["/opt/zookeeper/default/bin/zkServer.sh", "start-foreground"]
+ENTRYPOINT ["/entrypoint.sh"]

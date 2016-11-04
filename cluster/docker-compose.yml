@@ -1,0 +1,48 @@
+version: "2"
+
+services:
+  zk01:
+    image: acntech/zookeeper:3.4.9
+    hostname: zk01
+    environment:
+      - ZOOKEEPER_ID=1
+      - ZOOKEEPER_HOSTS=zk01,zk02,zk03,zk04,zk05
+      - ZOO_LOG4J_PROP=INFO,CONSOLE,ROLLINGFILE
+    volumes:
+      - ./log/zk01:/var/log/zookeeper
+  zk02:
+    image: acntech/zookeeper:3.4.9
+    hostname: zk02
+    environment:
+      - ZOOKEEPER_ID=2
+      - ZOOKEEPER_HOSTS=zk01,zk02,zk03,zk04,zk05
+      - ZOO_LOG4J_PROP=INFO,CONSOLE,ROLLINGFILE
+    volumes:
+      - ./log/zk02:/var/log/zookeeper
+  zk03:
+    image: acntech/zookeeper:3.4.9
+    hostname: zk03
+    environment:
+      - ZOOKEEPER_ID=3
+      - ZOOKEEPER_HOSTS=zk01,zk02,zk03,zk04,zk05
+      - ZOO_LOG4J_PROP=INFO,CONSOLE,ROLLINGFILE
+    volumes:
+      - ./log/zk03:/var/log/zookeeper
+  zk04:
+    image: acntech/zookeeper:3.4.9
+    hostname: zk04
+    environment:
+      - ZOOKEEPER_ID=4
+      - ZOOKEEPER_HOSTS=zk01,zk02,zk03,zk04,zk05
+      - ZOO_LOG4J_PROP=INFO,CONSOLE,ROLLINGFILE
+    volumes:
+      - ./log/zk04:/var/log/zookeeper
+  zk05:
+    image: acntech/zookeeper:3.4.9
+    hostname: zk05
+    environment:
+      - ZOOKEEPER_ID=5
+      - ZOOKEEPER_HOSTS=zk01,zk02,zk03,zk04,zk05
+      - ZOO_LOG4J_PROP=INFO,CONSOLE,ROLLINGFILE
+    volumes:
+      - ./log/zk05:/var/log/zookeeper

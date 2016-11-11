@@ -20,9 +20,10 @@
 # it should be linked to and not copied. Things like java jar files are found
 # relative to the canonical path of this script.
 #
-JAVA_HOME="/opt/java/default"
-PATH="${PATH}:${JAVA_HOME}/bin"
-
+if [ "x$JAVA_HOME" = "x" ]; then
+   JAVA_HOME="/opt/java/default"
+   PATH="${PATH}:${JAVA_HOME}/bin"
+fi
 
 # use POSTIX interface, symlink is followed automatically
 ZOOBIN="${BASH_SOURCE-$0}"
@@ -77,7 +78,7 @@ else
     ZOOMAIN="org.apache.zookeeper.server.quorum.QuorumPeerMain"
 fi
 
-if [ "x$SERVER_JVMFLAGS"  != "x" ]
+if [ "x$SERVER_JVMFLAGS" != "x" ]
 then
     JVMFLAGS="$SERVER_JVMFLAGS $JVMFLAGS"
 fi

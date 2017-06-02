@@ -3,7 +3,7 @@ version: "2"
 services:
   acntech_zookeeper:
     build: .
-    image: acntech/zookeeper:3.4.9
+    image: acntech/zookeeper:latest
     container_name: acntech-zookeeper
     hostname: zookeeper.acntech.internal
     ports:

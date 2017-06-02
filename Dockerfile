@@ -1,4 +1,4 @@
-FROM acntech/jre:1.8.0_101
+FROM acntech/jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
@@ -12,7 +12,6 @@ ENV ZOOKEEPER_HOME ${ZOOKEEPER_BASE}/default
 ENV ZOO_DATADIR /var/lib/zookeeper
 ENV ZOO_LOG_DIR /var/log/zookeeper
 ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
-ENV TERM xterm
 
 
 RUN apt-get update && \
@@ -54,6 +53,11 @@ COPY resources/zkServer.sh ${ZOOKEEPER_HOME}/bin/
 COPY resources/entrypoint.sh /entrypoint.sh
 
 
+RUN chown -R root:root ${ZOOKEEPER_BASE}
+RUN chmod +x ${ZOOKEEPER_HOME}/bin/zkServer.sh
+RUN chmod +x /entrypoint.sh
+
+
 EXPOSE 2181 2888 3888
 
 
@@ -62,6 +66,7 @@ WORKDIR ${ZOOKEEPER_HOME}
 
 VOLUME "${ZOOKEEPER_HOME}/conf"
 VOLUME "${ZOO_DATADIR}"
+VOLUME "${ZOO_LOG_DIR}"
 
 
 ENTRYPOINT ["/entrypoint.sh"]

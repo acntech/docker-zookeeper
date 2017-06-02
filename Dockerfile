@@ -1,4 +1,4 @@
-FROM acntech/jre
+FROM acntechie/jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 

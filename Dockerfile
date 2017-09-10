@@ -1,8 +1,8 @@
-FROM acntechie/jre
+FROM acntechie/jre:8
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.4.9
+ARG ZOOKEEPER_VERSION=3.4.10
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=zookeeper-${ZOOKEEPER_VERSION}
 
@@ -15,7 +15,8 @@ ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
 
 
 RUN apt-get update && \
-    apt-get -y upgrade
+    apt-get -y upgrade && \
+    rm -rf /var/lib/apt/lists/*
 
 
 RUN mkdir -p ${ZOOKEEPER_BASE} && \

@@ -1,0 +1,38 @@
+version: "2"
+
+services:
+  friendly_zookeeper_1:
+    image: acntechie/zookeeper
+    container_name: friendly_zookeeper_1
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOOKEEPER_ID=1
+      - ZOOKEEPER_HOSTS=friendly_zookeeper_1:2888:3888,friendly_zookeeper_2:2888:3888,friendly_zookeeper_3:2888:3888
+    networks:
+    - zookeeper
+
+  friendly_zookeeper_2:
+    image: acntechie/zookeeper
+    container_name: friendly_zookeeper_2
+    ports:
+      - "2182:2181"
+    environment:
+      - ZOOKEEPER_ID=2
+      - ZOOKEEPER_HOSTS=friendly_zookeeper_1:2888:3888,friendly_zookeeper_2:2888:3888,friendly_zookeeper_3:2888:3888
+    networks:
+    - zookeeper
+
+  friendly_zookeeper_3:
+    image: acntechie/zookeeper
+    container_name: friendly_zookeeper_3
+    ports:
+      - "2183:2181"
+    environment:
+      - ZOOKEEPER_ID=3
+      - ZOOKEEPER_HOSTS=friendly_zookeeper_1:2888:3888,friendly_zookeeper_2:2888:3888,friendly_zookeeper_3:2888:3888
+    networks:
+    - zookeeper
+
+networks:
+  zookeeper:

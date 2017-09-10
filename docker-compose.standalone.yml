@@ -1,0 +1,8 @@
+version: "2"
+
+services:
+  lonely_zookeeper:
+    image: acntechie/zookeeper
+    container_name: lonely_zookeeper
+    ports:
+      - "2181:2181"

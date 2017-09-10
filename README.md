@@ -3,18 +3,18 @@ Docker image with Apache ZooKeeper, based on the acntechie/jre image
 
 ## Configuration
 The Apache ZooKeeper instance can be configures using the following environment variables:
-* ZOOKEEPER_ID: A unique ID for the instance.
-* ZOOKEEPER_HOSTS: A comma separated string of ZooKeeper hosts that will make up a ZooKeeper cluster.
-* ZOOKEEPER_PORT: The ZooKeeper client port, used by clients to communicate with the instance.
-* ZOOKEEPER_PEER_PORT: The ZooKeeper peer port, used for communication between the peers in the ZooKeeper quorum.
-* ZOOKEEPER_LEADER_PORT: The ZooKeeper leader port, used for leader selection within a cluster.
+* ```ZOOKEEPER_ID```: A unique ID for the instance.
+* ```ZOOKEEPER_HOSTS```: A comma separated string of ZooKeeper hosts that will make up a ZooKeeper cluster.
+* ```ZOOKEEPER_PORT```: The ZooKeeper client port, used by clients to communicate with the instance.
+* ```ZOOKEEPER_PEER_PORT```: The ZooKeeper peer port, used for communication between the peers in the ZooKeeper quorum.
+* ```ZOOKEEPER_LEADER_PORT```: The ZooKeeper leader port, used for leader selection within a cluster.
 
 #### Default values
-* ZOOKEEPER_ID: 1
-* ZOOKEEPER_HOSTS:
-* ZOOKEEPER_PORT: 2181
-* ZOOKEEPER_PEER_PORT: 2888
-* ZOOKEEPER_LEADER_PORT: 3888
+* ```ZOOKEEPER_ID```: ```1```
+* ```ZOOKEEPER_HOSTS```: ```$(hostname):2888:3888```
+* ```ZOOKEEPER_PORT```: ```2181```
+* ```ZOOKEEPER_PEER_PORT```: ```2888```
+* ```ZOOKEEPER_LEADER_PORT```: ```3888```
 
 ## Running single instrance
 To run a stand-alone ZooKeeper node you need minimal configuration.

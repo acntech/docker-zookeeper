@@ -2,9 +2,9 @@
 Docker image with Apache ZooKeeper, based on the acntechie/jre image
 
 ## Configuration
-The Apache ZooKeeper instance can be configures using the following environment variables:
+The ZooKeeper instance can be configures using the following environment variables:
 * ```ZOOKEEPER_ID```: A unique ID for the instance.
-* ```ZOOKEEPER_HOSTS```: A comma separated string of ZooKeeper hosts that will make up a ZooKeeper cluster.
+* ```ZOOKEEPER_HOSTS```: A comma separated string of ZooKeeper nodes that will make up a ZooKeeper cluster.
 * ```ZOOKEEPER_PORT```: The ZooKeeper client port, used by clients to communicate with the instance.
 * ```ZOOKEEPER_PEER_PORT```: The ZooKeeper peer port, used for communication between the peers in the ZooKeeper quorum.
 * ```ZOOKEEPER_LEADER_PORT```: The ZooKeeper leader port, used for leader selection within a cluster.
@@ -27,7 +27,6 @@ docker run -d -name lonely_zookeeper -p 2181:2181 acntechie/zookeeper
 
 #### Docker Compose
 Define a ```docker-compose.yml``` file along the lines of:
-
 ```
 version: "2"
 
@@ -45,7 +44,7 @@ See example file ```docker-compose.standalone.yml```.
 
 ## Running cluster
 To run a cluser of multiple ZooKeeper nodes you need a bit more configuration.
-The ZooKeepers nodes need to be able to discover each other, so you need to set up the environment with the address to all nodes in the quorum.
+The ZooKeeper nodes need to be able to discover each other, so you need to set up the environment with the address to all nodes in the quorum.
 
 #### Docker Run
 First create a network for use with all the nodes:
@@ -68,7 +67,6 @@ docker run -d -name friendly_zookeeper_3 -p 2183:2181 --net zookeeper --env ZOOK
 
 #### Docker Compose
 Define a ```docker-compose.yml``` file along the lines of:
-
 ```
 version: "2"
 

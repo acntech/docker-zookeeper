@@ -1,8 +1,8 @@
-FROM acntechie/jre:8
+FROM openjdk:8-jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.4.10
+ARG ZOOKEEPER_VERSION=3.4.13
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=zookeeper-${ZOOKEEPER_VERSION}
 
@@ -24,38 +24,31 @@ RUN mkdir -p ${ZOOKEEPER_BASE} && \
     mkdir ${ZOO_LOG_DIR}
 
 
+WORKDIR /tmp
+
+
 RUN wget --no-cookies \
          --no-check-certificate \
          "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz" \
-         -O /tmp/zookeeper.tar.gz
+         -O zookeeper-${ZOOKEEPER_VERSION}.tar.gz
 
 RUN wget --no-cookies \
          --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc" \
-         -O /tmp/zookeeper.tar.gz.asc
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1" \
+         -O zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1
 
-RUN wget --no-cookies \
-         --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/KEYS" \
-         -O /tmp/zookeeper.KEYS
+RUN sha1sum --check zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1
 
-RUN gpg --import /tmp/zookeeper.KEYS && \
-    gpg --batch --verify /tmp/zookeeper.tar.gz.asc /tmp/zookeeper.tar.gz
-
-RUN tar -xzvf /tmp/zookeeper.tar.gz -C ${ZOOKEEPER_BASE}/ && \
+RUN tar -xzvf zookeeper-${ZOOKEEPER_VERSION}.tar.gz -C ${ZOOKEEPER_BASE}/ && \
     cd ${ZOOKEEPER_BASE} && \
     ln -s ${ZOOKEEPER_DIR}/ default && \
     rm -f /tmp/zookeeper.*
 
 
-COPY resources/zoo.cfg ${ZOOKEEPER_HOME}/conf/
-COPY resources/log4j.properties ${ZOOKEEPER_HOME}/conf/
-COPY resources/zkServer.sh ${ZOOKEEPER_HOME}/bin/
 COPY resources/entrypoint.sh /entrypoint.sh
 
 
 RUN chown -R root:root ${ZOOKEEPER_BASE}
-RUN chmod +x ${ZOOKEEPER_HOME}/bin/zkServer.sh
 RUN chmod +x /entrypoint.sh
 
 

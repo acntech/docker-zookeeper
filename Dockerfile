@@ -14,35 +14,39 @@ ENV ZOO_LOG_DIR /var/log/zookeeper
 ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
 
 
+WORKDIR /tmp
+
+
 RUN apt-get update && \
     apt-get -y upgrade && \
     rm -rf /var/lib/apt/lists/*
-
 
 RUN mkdir -p ${ZOOKEEPER_BASE} && \
     mkdir ${ZOO_DATADIR} && \
     mkdir ${ZOO_LOG_DIR}
 
-
-WORKDIR /tmp
-
-
 RUN wget --no-cookies \
          --no-check-certificate \
          "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz" \
-         -O zookeeper-${ZOOKEEPER_VERSION}.tar.gz
+         -O zookeeper.tar.gz
 
 RUN wget --no-cookies \
          --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1" \
-         -O zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc" \
+         -O zookeeper.tar.gz.asc
 
-RUN sha1sum --check zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha1
+RUN wget --no-cookies \
+         --no-check-certificate \
+         "${ZOOKEEPER_MIRROR}/KEYS" \
+         -O zookeeper.KEYS
 
-RUN tar -xzvf zookeeper-${ZOOKEEPER_VERSION}.tar.gz -C ${ZOOKEEPER_BASE}/ && \
+RUN gpg --import --no-tty zookeeper.KEYS && \
+    gpg --batch --verify --no-tty zookeeper.tar.gz.asc zookeeper.tar.gz
+
+RUN tar -xzvf zookeeper.tar.gz -C ${ZOOKEEPER_BASE}/ && \
     cd ${ZOOKEEPER_BASE} && \
     ln -s ${ZOOKEEPER_DIR}/ default && \
-    rm -f /tmp/zookeeper.*
+    rm -f zookeeper.*
 
 
 COPY resources/entrypoint.sh /entrypoint.sh

@@ -2,7 +2,7 @@ FROM openjdk:8-jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.4.13
+ARG ZOOKEEPER_VERSION=3.4.14
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=zookeeper-${ZOOKEEPER_VERSION}
 

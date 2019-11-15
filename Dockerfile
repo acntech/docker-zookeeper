@@ -2,7 +2,7 @@ FROM openjdk:8-jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.4.14
+ARG ZOOKEEPER_VERSION=3.5.6
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=zookeeper-${ZOOKEEPER_VERSION}
 
@@ -27,12 +27,12 @@ RUN mkdir -p ${ZOOKEEPER_BASE} && \
 
 RUN wget --no-cookies \
          --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz" \
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}.tar.gz" \
          -O zookeeper.tar.gz
 
 RUN wget --no-cookies \
          --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc" \
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc" \
          -O zookeeper.tar.gz.asc
 
 RUN wget --no-cookies \

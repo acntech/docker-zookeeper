@@ -2,15 +2,16 @@ FROM openjdk:11-jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.6.2
+ARG ZOOKEEPER_VERSION=3.7.0
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=apache-zookeeper-${ZOOKEEPER_VERSION}-bin
 
 
 ENV ZOOKEEPER_BASE /opt/zookeeper
 ENV ZOOKEEPER_HOME ${ZOOKEEPER_BASE}/default
-ENV ZOO_DATADIR /var/lib/zookeeper
-ENV ZOO_LOG_DIR /var/log/zookeeper
+ENV ZOOKEEPER_DATA_ROOT /var/lib/zookeeper
+ENV ZOO_DATADIR ${ZOOKEEPER_DATA}/data
+ENV ZOO_LOG_DIR ${ZOOKEEPER_DATA}/logs
 ENV PATH ${PATH}:${ZOOKEEPER_HOME}/bin
 
 
@@ -22,8 +23,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p ${ZOOKEEPER_BASE} && \
-    mkdir ${ZOO_DATADIR} && \
-    mkdir ${ZOO_LOG_DIR}
+    mkdir -p ${ZOO_DATADIR} && \
+    mkdir -p ${ZOO_LOG_DIR} && \
+    cd /var/log && \
+    ln -s ${ZOO_LOG_DIR}/ zookeeper
 
 RUN wget --no-cookies \
          --no-check-certificate \
@@ -62,9 +65,7 @@ EXPOSE 2181 2888 3888
 WORKDIR ${ZOOKEEPER_HOME}
 
 
-VOLUME "${ZOOKEEPER_HOME}/conf"
-VOLUME "${ZOO_DATADIR}"
-VOLUME "${ZOO_LOG_DIR}"
+VOLUME "${ZOOKEEPER_DATA_ROOT}"
 
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -1,8 +1,8 @@
-FROM openjdk:11-jre
+FROM eclipse-temurin:17-jre
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG ZOOKEEPER_VERSION=3.7.0
+ARG ZOOKEEPER_VERSION=3.8.0
 ARG ZOOKEEPER_MIRROR=https://dist.apache.org/repos/dist/release/zookeeper
 ARG ZOOKEEPER_DIR=apache-zookeeper-${ZOOKEEPER_VERSION}-bin
 
@@ -20,6 +20,7 @@ WORKDIR /tmp
 
 RUN apt-get update && \
     apt-get -y upgrade && \
+    apt-get -y install gpg && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p ${ZOOKEEPER_BASE} && \
@@ -28,23 +29,15 @@ RUN mkdir -p ${ZOOKEEPER_BASE} && \
     cd /var/log && \
     ln -s ${ZOO_LOG_DIR}/ zookeeper
 
-RUN wget --no-cookies \
-         --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz" \
-         -O zookeeper.tar.gz
+RUN curl --silent --show-error --output zookeeper.tar.gz \
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz" && \
+    curl --silent --show-error --output zookeeper.tar.gz.asc \
+         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.asc" && \
+    curl --silent --show-error --output zookeeper.KEYS \
+         "${ZOOKEEPER_MIRROR}/KEYS"
 
-RUN wget --no-cookies \
-         --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.asc" \
-         -O zookeeper.tar.gz.asc
-
-RUN wget --no-cookies \
-         --no-check-certificate \
-         "${ZOOKEEPER_MIRROR}/KEYS" \
-         -O zookeeper.KEYS
-
-RUN gpg --import --no-tty zookeeper.KEYS && \
-    gpg --batch --verify --no-tty zookeeper.tar.gz.asc zookeeper.tar.gz
+RUN gpg --quiet --import --no-tty zookeeper.KEYS && \
+    gpg --quiet --batch --verify --no-tty zookeeper.tar.gz.asc zookeeper.tar.gz
 
 RUN tar -xzvf zookeeper.tar.gz -C ${ZOOKEEPER_BASE}/ && \
     cd ${ZOOKEEPER_BASE} && \
@@ -52,7 +45,7 @@ RUN tar -xzvf zookeeper.tar.gz -C ${ZOOKEEPER_BASE}/ && \
     rm -f zookeeper.*
 
 
-COPY resources/entrypoint.sh /entrypoint.sh
+COPY ./resources/entrypoint.sh /entrypoint.sh
 
 
 RUN chown -R root:root ${ZOOKEEPER_BASE}

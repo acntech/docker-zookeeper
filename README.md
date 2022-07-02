@@ -1,5 +1,5 @@
 # docker-zookeeper
-Docker image with Apache ZooKeeper, based on the openjdk:11-jre image
+Docker image with Apache ZooKeeper, based on the eclipse-temurin:17-jre image
 
 ## Configuration
 The ZooKeeper instance can be configures using the following environment variables:
